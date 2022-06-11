@@ -57,9 +57,9 @@ void CGameControllerFoot::StartRound()
 	m_BallSpawning = g_Config.m_SvBallRespawn * Server()->TickSpeed() + Server()->Tick();
 }
 
-int CGameControllerFoot::OnGoalRed(int Owner)
+int CGameControllerFoot::OnGoalRed(int Owner, bool dunk)
 { //do scoreing teams
-	IGameController::OnGoalRed(Owner);
+	IGameController::OnGoalRed(Owner, dunk);
 	if(!GameServer()->m_apPlayers[Owner])
 	{
 		Reset();
@@ -74,13 +74,26 @@ int CGameControllerFoot::OnGoalRed(int Owner)
 			)
 	{
 		str_format(aBuf, sizeof(aBuf), "%s scored for the blue team with a pass from %s", Server()->ClientName(Owner), Server()->ClientName(m_Passer));
-		IGameController::OnGoalRed(m_Passer);
+		if(dunk)
+			str_format(aBuf, sizeof(aBuf), "%s dunked for the blue team with a pass from %s [+1]", Server()->ClientName(Owner), Server()->ClientName(m_Passer));
+		IGameController::OnGoalRed(m_Passer, dunk);
 		m_aTeamscore[TEAM_BLUE]++;
 	}
 	else
+	{
 		str_format(aBuf, sizeof(aBuf), "%s scored for the blue team", Server()->ClientName(Owner));
+		if(dunk)
+		{
+			str_format(aBuf, sizeof(aBuf), "%s dunked for the blue team [+1]", Server()->ClientName(Owner));
+			m_aTeamscore[TEAM_BLUE]++;
+		}
+	}
 	if (GameServer()->m_apPlayers[Owner]->GetTeam() == TEAM_BLUE)
+	{
+		if(g_Config.m_SvBacket)
+			m_aTeamscore[TEAM_BLUE]++;
 		m_aTeamscore[TEAM_BLUE]++;
+	}
 	else if (GameServer()->m_apPlayers[Owner]->GetTeam() == TEAM_RED)
 		m_aTeamscore[TEAM_RED]--;
 
@@ -92,9 +105,9 @@ int CGameControllerFoot::OnGoalRed(int Owner)
 	return 0;
 }
 
-int CGameControllerFoot::OnGoalBlue(int Owner)
+int CGameControllerFoot::OnGoalBlue(int Owner, bool dunk)
 { //do scoreing teams
-	IGameController::OnGoalBlue(Owner);
+	IGameController::OnGoalBlue(Owner, dunk);
 	if(!GameServer()->m_apPlayers[Owner])
 	{
 		Reset();
@@ -109,15 +122,30 @@ int CGameControllerFoot::OnGoalBlue(int Owner)
 			)
 	{
 		str_format(aBuf, sizeof(aBuf), "%s scored for the red team with a pass from %s", Server()->ClientName(Owner), Server()->ClientName(m_Passer));
-		IGameController::OnGoalBlue(m_Passer);
+		if(dunk)
+			str_format(aBuf, sizeof(aBuf), "%s dunked for the red team with a pass from %s [+1]", Server()->ClientName(Owner), Server()->ClientName(m_Passer));
+		IGameController::OnGoalBlue(m_Passer, dunk);
 		m_aTeamscore[TEAM_RED]++;
 	}
 	else
+	{
 		str_format(aBuf, sizeof(aBuf), "%s scored for the red team", Server()->ClientName(Owner));
+		if(dunk)
+		{
+			str_format(aBuf, sizeof(aBuf), "%s dunked for the red team [+1]", Server()->ClientName(Owner));
+			m_aTeamscore[TEAM_RED]++;
+		}
+	}
 	if (GameServer()->m_apPlayers[Owner]->GetTeam() == TEAM_RED)
+	{
+		if(g_Config.m_SvBacket)
+			m_aTeamscore[TEAM_RED]++;
 		m_aTeamscore[TEAM_RED]++;
+	}
 	else if (GameServer()->m_apPlayers[Owner]->GetTeam() == TEAM_BLUE)
+	{
 		m_aTeamscore[TEAM_BLUE]--;
+	}
 
 	GameServer()->CreateSoundGlobal(SOUND_CTF_DROP);
 

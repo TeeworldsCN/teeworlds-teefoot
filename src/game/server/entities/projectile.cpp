@@ -216,14 +216,14 @@ void CProjectile::Tick()
 			{
 				GameServer()->m_World.DestroyEntity(this);
 				GameServer()->CreateExplosion(CurPosition, m_Owner, m_Weapon, true);
-				GameServer()->m_pController->OnGoalRed(m_Owner);
+				GameServer()->m_pController->OnGoalRed(m_Owner, false);
 				//game.controller->on_player_goal(game.players[owner], 0);
 			}
 			else if(GameServer()->Collision()->isGoal((int)CurPosition.x,(int)CurPosition.y, true) && GameServer()->m_apPlayers[m_Owner] && GameServer()->m_apPlayers[m_Owner]->GetTeam() != -1)// && m_Owner > -1)
 			{
 				GameServer()->m_World.DestroyEntity(this);
 				GameServer()->CreateExplosion(CurPosition, m_Owner, m_Weapon, true);
-				GameServer()->m_pController->OnGoalBlue(m_Owner);
+				GameServer()->m_pController->OnGoalBlue(m_Owner, false);
 				//game.controller->on_player_goal(game.players[owner], 1);
 			}
 			/*if(TargetChr && m_Weapon == WEAPON_GRENADE)

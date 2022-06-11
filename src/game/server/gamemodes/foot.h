@@ -16,8 +16,8 @@ public:
 	CPlayer *m_apPlayers[MAX_CLIENTS];
 
 	virtual void Snap(int SnappingClient);
-	int OnGoalRed(int Owner);
-	int OnGoalBlue(int Owner);
+	int OnGoalRed(int Owner, bool dunk);
+	int OnGoalBlue(int Owner, bool dunk);
 	virtual void StartRound();
 	virtual void DoWincheck();
 };

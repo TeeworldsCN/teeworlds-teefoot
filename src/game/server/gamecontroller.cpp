@@ -368,7 +368,7 @@ void IGameController::OnCharacterSpawn(class CCharacter *pChr)
 	// give default weapons
 	if(str_comp_nocase(g_Config.m_SvGametype, "foot") == 0)
 	{
-		
+
 			pChr->GiveWeapon(WEAPON_HAMMER, -1);
 			pChr->SetWeapon(WEAPON_HAMMER);
 	}
@@ -377,7 +377,7 @@ void IGameController::OnCharacterSpawn(class CCharacter *pChr)
 		pChr->GiveWeapon(WEAPON_HAMMER, -1);
 		pChr->GiveWeapon(WEAPON_GUN, 10);
 	}
-	
+
 }
 
 void IGameController::DoWarmup(int Seconds)
@@ -735,7 +735,7 @@ int IGameController::ClampTeam(int Team)
 	return 0;
 }
 
-int IGameController::OnGoalRed(int Owner)
+int IGameController::OnGoalRed(int Owner, bool dunk)
 {
 	CCharacter* Character = GameServer()->GetPlayerChar(Owner);
 	if(!Character)
@@ -746,13 +746,21 @@ int IGameController::OnGoalRed(int Owner)
 	if(Player->GetTeam() == TEAM_RED)
 		Player->m_Score--;
 	else if(Player->GetTeam() == TEAM_BLUE)
+	{
+		if(g_Config.m_SvBacket)
+		{
+			if(dunk)
+				Player->m_Score++;
+			Player->m_Score++;
+		}
 		Player->m_Score++;
+	}
 
 
 	return 0;
 }
 
-int IGameController::OnGoalBlue(int Owner)
+int IGameController::OnGoalBlue(int Owner, bool dunk)
 {
 	CCharacter* Character = GameServer()->GetPlayerChar(Owner);
 	if(!Character)
@@ -763,7 +771,15 @@ int IGameController::OnGoalBlue(int Owner)
 	if(Player->GetTeam() == TEAM_BLUE)
 		Player->m_Score--;
 	else if(Player->GetTeam() == TEAM_RED)
+	{
+		if(g_Config.m_SvBacket)
+		{
+			if(dunk)
+				Player->m_Score++;
+			Player->m_Score++;
+		}
 		Player->m_Score++;
+	}
 
 
 	return 0;
@@ -774,7 +790,7 @@ void IGameController::RespawnAfterGoal()
 	for(int i = 0; i < MAX_CLIENTS; i++)
 	{
 		if(GameServer()->m_apPlayers[i])
-		{	
+		{
 			//GameServer()->m_apPlayers[i]->Respawn();
 			GameServer()->m_apPlayers[i]->m_RespawnTick = Server()->Tick() + 2 *Server()->TickSpeed();
 		}
@@ -791,7 +807,7 @@ void IGameController::EnterNextRound(int PlayersID)
 void IGameController::WaitForNextRound()
 {
 	ResetGame();
-	
+
 	m_SuddenDeath = 0;
 	m_GameOverTick = -1;
 	GameServer()->m_World.m_Paused = false;

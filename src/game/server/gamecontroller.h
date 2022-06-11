@@ -124,8 +124,8 @@ public:
 	*/
 	virtual int OnCharacterDeath(class CCharacter *pVictim, class CPlayer *pKiller, int Weapon);
 
-	virtual int OnGoalRed(int Goaler); //<- this are..
-	virtual int OnGoalBlue(int Goaler); //<- ..the goals
+	virtual int OnGoalRed(int Goaler, bool dunk); //<- this are..
+	virtual int OnGoalBlue(int Goaler, bool dunk); //<- ..the goals
 
 	int m_BallSpawning;
 	int m_BallSpawnTick;

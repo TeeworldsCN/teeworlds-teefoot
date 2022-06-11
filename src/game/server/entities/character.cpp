@@ -262,7 +262,7 @@ void CCharacter::FireWeapon()
 
 	if(str_comp_nocase(g_Config.m_SvGametype, "foot") == 0 && m_ReloadTimer != 0 && !(m_LoseBallTick && Server()->Tick() >= m_LoseBallTick))
 		return;
-		
+
 	DoWeaponSwitch();
 	vec2 Direction = normalize(vec2(m_LatestInput.m_TargetX, m_LatestInput.m_TargetY));
 
@@ -281,7 +281,7 @@ void CCharacter::FireWeapon()
 
 	if(m_LoseBallTick && Server()->Tick() >= m_LoseBallTick) // Fire the ball if the player has been holding it for too long.
 		WillFire = true;
-		
+
 	if(!WillFire)
 		return;
 
@@ -406,13 +406,13 @@ void CCharacter::FireWeapon()
 			{
 				GameServer()->m_World.RemoveProjectiles();
 				GameServer()->CreateExplosion(m_Pos, m_pPlayer->GetCID(), WEAPON_GRENADE, true);
-				GameServer()->m_pController->OnGoalRed(m_pPlayer->GetCID());
+				GameServer()->m_pController->OnGoalRed(m_pPlayer->GetCID(), false);
 			}
 			else if(GameServer()->Collision()->isGoal((int)m_Pos.x,(int)m_Pos.y, true) && m_pPlayer && m_pPlayer->GetTeam() != -1)// && m_Owner > -1)
 			{
 				GameServer()->m_World.RemoveProjectiles();
 				GameServer()->CreateExplosion(m_Pos, m_pPlayer->GetCID(), WEAPON_GRENADE, true);
-				GameServer()->m_pController->OnGoalBlue(m_pPlayer->GetCID());
+				GameServer()->m_pController->OnGoalBlue(m_pPlayer->GetCID(), false);
 			}
 			CProjectile *pProj = new CProjectile(GameWorld(), WEAPON_GRENADE,
 				m_pPlayer->GetCID(),
@@ -457,7 +457,7 @@ void CCharacter::FireWeapon()
 	m_AttackTick = Server()->Tick();
 
 	if(str_comp_nocase(g_Config.m_SvGametype, "foot") == 0)
-	{	
+	{
 		if(GameServer()->m_pController->m_LostBall == 1)
 		{
 			m_aWeapons[WEAPON_GRENADE].m_Got = true;
@@ -627,6 +627,24 @@ void CCharacter::Tick()
 		Die(m_pPlayer->GetCID(), WEAPON_WORLD);
 	}
 
+	if(GameServer()->Collision()->isGoal(m_Pos.x,m_Pos.y, false)&&g_Config.m_SvBacket)
+	{
+		if(m_pPlayer->GetCharacter()->LoseBall())
+		{
+			GameServer()->m_pController->OnGoalRed(m_pPlayer->GetCID(), true);
+		}
+		Die(m_pPlayer->GetCID(), WEAPON_GAME);
+	}
+
+	if(GameServer()->Collision()->isGoal(m_Pos.x,m_Pos.y, true)&&g_Config.m_SvBacket)
+	{
+		if(m_pPlayer->GetCharacter()->LoseBall())
+		{
+			GameServer()->m_pController->OnGoalBlue(m_pPlayer->GetCID(), true);
+		}
+		Die(m_pPlayer->GetCID(), WEAPON_GAME);
+	}
+
 	// handle Weapons
 	HandleWeapons();
 
@@ -785,7 +803,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 
 	if(GameServer()->m_pController->m_IsNoDamage)
 		return false;
-	
+
 	if(GameServer()->m_pController->IsFriendlyFire(m_pPlayer->GetCID(), From) && !g_Config.m_SvTeamdamage)
 		return false;
 
