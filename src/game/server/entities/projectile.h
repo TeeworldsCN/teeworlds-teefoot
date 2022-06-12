@@ -32,6 +32,7 @@ private:
 	bool m_Explosive;
 	int m_FootPickupDistance; //<-foot grenade diff.
 	int m_LastOwner;
+	float m_Speed;
 };
 
 #endif

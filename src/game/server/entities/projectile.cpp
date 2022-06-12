@@ -21,6 +21,14 @@ CProjectile::CProjectile(CGameWorld *pGameWorld, int Type, int Owner, vec2 Pos, 
 	m_Weapon = Weapon;
 	m_StartTick = Server()->Tick();
 	m_Explosive = Explosive;
+	if(g_Config.m_SvGrenadeStartSpeed && GameServer()->GetPlayerChar(m_Owner))
+	{
+		m_Speed = g_Config.m_SvGrenadeStartSpeed + GameServer()->GetPlayerChar(m_Owner)->m_Speed*30; // TODO
+		m_Direction.x *= m_Speed/GameServer()->Tuning()->m_GrenadeSpeed;
+		m_Direction.y *= m_Speed/GameServer()->Tuning()->m_GrenadeSpeed;
+	}
+	else
+		m_Speed = GameServer()->Tuning()->m_GrenadeSpeed;
 	if((Dir.x < 0?-Dir.x:Dir.x) > (Dir.y < 0?-Dir.y:Dir.y))
 		this->m_FootPickupDistance = abs(Dir.x * (float)Server()->TickSpeed() * GameServer()->Tuning()->m_GrenadeSpeed / 4000.0);
 	else
@@ -44,6 +52,7 @@ vec2 CProjectile::GetPos(float Time)
 		case WEAPON_GRENADE:
 			Curvature = GameServer()->Tuning()->m_GrenadeCurvature;
 			Speed = GameServer()->Tuning()->m_GrenadeSpeed;
+			//Speed = m_Speed; // can't use m_Speed, otherwise client render will not work
 			break;
 
 		case WEAPON_SHOTGUN:
@@ -173,7 +182,9 @@ void CProjectile::Tick()
 				}
 				if(CollidedAtY)
 				{
+
 					m_Direction.y = -(m_Direction.y + 2*GameServer()->Tuning()->m_GrenadeCurvature/10000*GameServer()->Tuning()->m_GrenadeSpeed*(Server()->Tick()-m_StartTick)/(float)Server()->TickSpeed())/(g_Config.m_SvBounceLoss+100)*100;
+					// can't use m_Speed, otherwise speed will increase after collide when base speed is large enough
 					if (m_CollisionByY >= 50)
 					{
 						GameServer()->m_pController->m_BallSpawning = Server()->Tick() + 4 * Server()->TickSpeed();
