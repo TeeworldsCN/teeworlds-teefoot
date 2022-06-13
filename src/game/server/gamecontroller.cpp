@@ -359,7 +359,7 @@ int IGameController::OnCharacterDeath(class CCharacter *pVictim, class CPlayer *
 			pKiller->m_Score++; // normal kill
 	}
 	if(Weapon == WEAPON_SELF)
-		pVictim->GetPlayer()->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()*3.0f;
+		pVictim->GetPlayer()->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()*g_Config.m_SvRespawnTime;
 	return 0;
 }
 
@@ -740,14 +740,9 @@ int IGameController::ClampTeam(int Team)
 
 int IGameController::OnGoalRed(int Owner, bool dunk)
 {
-	/*
-	CCharacter* Character = GameServer()->GetPlayerChar(Owner);
-	if(!Character)
-		return 0;
-
-	CPlayer* Player = Character->GetPlayer();
-	*/
 	CPlayer* Player = GameServer()->m_apPlayers[Owner];
+	if(!Player)
+		return 0;
 
 	if(Player->GetTeam() == TEAM_RED)
 		Player->m_Score--;
@@ -768,17 +763,9 @@ int IGameController::OnGoalRed(int Owner, bool dunk)
 
 int IGameController::OnGoalBlue(int Owner, bool dunk)
 {
-	/*
-	CCharacter* Character = GameServer()->GetPlayerChar(Owner);
-	if(!Character)
-	{
-		return 0;
-	}
-
-	CPlayer* Player = Character->GetPlayer();
-	*/
-
 	CPlayer* Player = GameServer()->m_apPlayers[Owner];
+	if(!Player)
+		return 0;
 
 	if(Player->GetTeam() == TEAM_BLUE)
 		Player->m_Score--;

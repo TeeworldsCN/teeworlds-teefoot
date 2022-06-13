@@ -220,7 +220,7 @@ void CProjectile::Tick()
 					TChar->PlayerGetBall();
 					GameServer()->m_World.DestroyEntity(this);
 					m_LastOwner = m_Owner;
-					TChar->m_LoseBallTick = Server()->Tick() + Server()->TickSpeed() * 3;
+					TChar->m_LoseBallTick = Server()->Tick() + Server()->TickSpeed() * g_Config.m_SvKeepTime;
 					GameServer()->m_pController->m_Passer = m_Owner;
 			}
 			else if(GameServer()->Collision()->isGoal((int)CurPosition.x,(int)CurPosition.y, false) && GameServer()->m_apPlayers[m_Owner] && GameServer()->m_apPlayers[m_Owner]->GetTeam() != -1)// && m_Owner > -1)

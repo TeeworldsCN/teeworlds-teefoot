@@ -469,7 +469,7 @@ void CCharacter::FireWeapon()
 			m_aWeapons[WEAPON_GRENADE].m_Got = true;
 			m_aWeapons[WEAPON_GRENADE].m_Ammo = 1;
 			SetWeapon(WEAPON_GRENADE);
-			m_LoseBallTick = Server()->Tick() +Server()->TickSpeed() * 3;
+			m_LoseBallTick = Server()->Tick() +Server()->TickSpeed() * g_Config.m_SvKeepTime;
 			GameServer()->m_pController->m_LostBall = 0;
 		}
 		else if (m_ActiveWeapon == WEAPON_GRENADE)
@@ -606,7 +606,7 @@ void CCharacter::Tick()
 {
 	if(str_comp_nocase(g_Config.m_SvGametype, "foot") == 0)
 	{
-		this->m_Armor = (m_LoseBallTick - Server()->Tick()) * 11 / (Server()->TickSpeed() * 3);
+		this->m_Armor = (m_LoseBallTick - Server()->Tick()) * 11 / (Server()->TickSpeed() * g_Config.m_SvKeepTime);
 		if(this->m_Armor >= 11)
 			this->m_Armor -= 1;
 	}
@@ -966,7 +966,7 @@ void CCharacter::PlayerGetBall()
 	m_aWeapons[WEAPON_GRENADE].m_Got = true;
 	m_aWeapons[WEAPON_GRENADE].m_Ammo = 1;
 	SetWeapon(WEAPON_GRENADE);
-	m_LoseBallTick = Server()->Tick() + Server()->TickSpeed() * 3;
+	m_LoseBallTick = Server()->Tick() + Server()->TickSpeed() * g_Config.m_SvKeepTime;
 }
 
 bool CCharacter::LoseBall()
