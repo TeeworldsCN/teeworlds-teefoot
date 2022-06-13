@@ -77,6 +77,7 @@ bool CCharacter::Spawn(CPlayer *pPlayer, vec2 Pos)
 	m_Core.Reset();
 	m_Core.Init(&GameServer()->m_World.m_Core, GameServer()->Collision());
 	m_Core.m_Pos = m_Pos;
+	//m_Core.m_Team = pPlayer->GetTeam();
 	m_Speed = 0;
 	GameServer()->m_World.m_Core.m_apCharacters[m_pPlayer->GetCID()] = &m_Core;
 
@@ -318,6 +319,8 @@ void CCharacter::FireWeapon()
 					continue;
 
 				// set his velocity to fast upward (for now)
+				if(str_comp_nocase(g_Config.m_SvGametype, "foot") == 0&&g_Config.m_SvRealFoot)
+					continue;
 				if(length(pTarget->m_Pos-ProjStartPos) > 0.0f)
 					GameServer()->CreateHammerHit(pTarget->m_Pos-normalize(pTarget->m_Pos-ProjStartPos)*m_ProximityRadius*0.5f);
 				else
@@ -332,7 +335,7 @@ void CCharacter::FireWeapon()
 				pTarget->TakeDamage(vec2(0.f, -1.f) + normalize(Dir + vec2(0.f, -1.1f)) * 10.0f, g_pData->m_Weapons.m_Hammer.m_pBase->m_Damage,
 					m_pPlayer->GetCID(), m_ActiveWeapon);
 				if(str_comp_nocase(g_Config.m_SvGametype, "foot") == 0)
-					pTarget->LoseBall();
+					pTarget->LoseBall(); // posibility that others get ball in hazard?
 
 				Hits++;
 			}
@@ -634,6 +637,7 @@ void CCharacter::Tick()
 	{
 		if(m_pPlayer->GetCharacter()->LoseBall())
 		{
+			GameServer()->m_pController->m_LostBall = 0; // to avoid other player get ball from void
 			GameServer()->m_pController->OnGoalRed(m_pPlayer->GetCID(), true);
 		}
 		Die(m_pPlayer->GetCID(), WEAPON_GAME);
@@ -643,6 +647,7 @@ void CCharacter::Tick()
 	{
 		if(m_pPlayer->GetCharacter()->LoseBall())
 		{
+			GameServer()->m_pController->m_LostBall = 0;
 			GameServer()->m_pController->OnGoalBlue(m_pPlayer->GetCID(), true);
 		}
 		Die(m_pPlayer->GetCID(), WEAPON_GAME);

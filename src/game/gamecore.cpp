@@ -72,6 +72,7 @@ void CCharacterCore::Reset()
 	m_HookedPlayer = -1;
 	m_Jumped = 0;
 	m_TriggeredEvents = 0;
+	//m_Team = -1;
 }
 
 void CCharacterCore::Tick(bool UseInput)
@@ -442,4 +443,3 @@ void CCharacterCore::Quantize()
 	Write(&Core);
 	Read(&Core);
 }
-

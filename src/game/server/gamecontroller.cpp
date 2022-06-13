@@ -740,11 +740,14 @@ int IGameController::ClampTeam(int Team)
 
 int IGameController::OnGoalRed(int Owner, bool dunk)
 {
+	/*
 	CCharacter* Character = GameServer()->GetPlayerChar(Owner);
 	if(!Character)
 		return 0;
 
 	CPlayer* Player = Character->GetPlayer();
+	*/
+	CPlayer* Player = GameServer()->m_apPlayers[Owner];
 
 	if(Player->GetTeam() == TEAM_RED)
 		Player->m_Score--;
@@ -765,11 +768,17 @@ int IGameController::OnGoalRed(int Owner, bool dunk)
 
 int IGameController::OnGoalBlue(int Owner, bool dunk)
 {
+	/*
 	CCharacter* Character = GameServer()->GetPlayerChar(Owner);
 	if(!Character)
+	{
 		return 0;
+	}
 
 	CPlayer* Player = Character->GetPlayer();
+	*/
+
+	CPlayer* Player = GameServer()->m_apPlayers[Owner];
 
 	if(Player->GetTeam() == TEAM_BLUE)
 		Player->m_Score--;

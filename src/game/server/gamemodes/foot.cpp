@@ -123,7 +123,10 @@ int CGameControllerFoot::OnGoalBlue(int Owner, bool dunk)
 	{
 		str_format(aBuf, sizeof(aBuf), "%s scored for the red team with a pass from %s", Server()->ClientName(Owner), Server()->ClientName(m_Passer));
 		if(dunk)
+		{
 			str_format(aBuf, sizeof(aBuf), "%s dunked for the red team with a pass from %s [+1]", Server()->ClientName(Owner), Server()->ClientName(m_Passer));
+			m_aTeamscore[TEAM_RED]++;
+		}
 		IGameController::OnGoalBlue(m_Passer, dunk);
 		m_aTeamscore[TEAM_RED]++;
 	}

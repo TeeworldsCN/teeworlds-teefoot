@@ -41,7 +41,10 @@ void CPickup::Tick()
 			// respawn
 			m_SpawnTick = -1;
 			if(m_Type == POWERUP_WEAPON)
+			{
 				GameServer()->CreateSound(m_Pos, SOUND_WEAPON_SPAWN);
+				GameServer()->SendChatTarget(-1, "Ball respawned");
+			}
 		}
 		else if( ( !GameServer()->m_pController->m_BallSpawning && m_SpawnTick == 0 ) || GameServer()->m_pController->m_BallSpawning  > Server()->Tick())
 			return;

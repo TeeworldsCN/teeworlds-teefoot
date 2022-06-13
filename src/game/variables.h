@@ -86,6 +86,8 @@ MACRO_CONFIG_INT(SvBacket, sv_basket, 0, 0, 1, CFGFLAG_SERVER, "Dunking and Bask
 MACRO_CONFIG_INT(SvSelfKill, sv_selfkill, 1, 0, 1, CFGFLAG_SERVER, "Enable or disable selfkill")
 MACRO_CONFIG_INT(SvSelfKillScore, sv_selfkillscore, 0, 0, 1, CFGFLAG_SERVER, "negative score for selfkill")
 MACRO_CONFIG_INT(SvGrenadeStartSpeed, sv_grenade_startspeed, 0, 0, 1000, CFGFLAG_SERVER, "value for grenadespeed, which adapt at the own speed")
+//MACRO_CONFIG_INT(SvHookTeam, sv_hook_team, 0, 0, 1, CFGFLAG_SERVER, "Hook your teammate")
+MACRO_CONFIG_INT(SvRealFoot, sv_real_foot, 0, 0, 1, CFGFLAG_SERVER, "Hammerhits on/off")
 // debug
 #ifdef CONF_DEBUG // this one can crash the server if not used correctly
 	MACRO_CONFIG_INT(DbgDummies, dbg_dummies, 0, 0, 15, CFGFLAG_SERVER, "")

@@ -23,7 +23,7 @@ CProjectile::CProjectile(CGameWorld *pGameWorld, int Type, int Owner, vec2 Pos, 
 	m_Explosive = Explosive;
 	if(g_Config.m_SvGrenadeStartSpeed && GameServer()->GetPlayerChar(m_Owner))
 	{
-		m_Speed = g_Config.m_SvGrenadeStartSpeed + GameServer()->GetPlayerChar(m_Owner)->m_Speed*30; // TODO
+		m_Speed = (g_Config.m_SvGrenadeStartSpeed + GameServer()->GetPlayerChar(m_Owner)->m_Speed*2)*5; // TODO
 		m_Direction.x *= m_Speed/GameServer()->Tuning()->m_GrenadeSpeed;
 		m_Direction.y *= m_Speed/GameServer()->Tuning()->m_GrenadeSpeed;
 	}
