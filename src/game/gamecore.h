@@ -10,8 +10,6 @@
 #include "collision.h"
 #include <engine/shared/protocol.h>
 #include <game/generated/protocol.h>
-// for Team Hook configuration
-//#include <engine/shared/config.h>
 
 
 class CTuneParam
@@ -195,8 +193,6 @@ public:
 	CNetObj_PlayerInput m_Input;
 
 	int m_TriggeredEvents;
-	// for Hook Team configuration
-	//int m_Team;
 
 	void Init(CWorldCore *pWorld, CCollision *pCollision);
 	void Reset();

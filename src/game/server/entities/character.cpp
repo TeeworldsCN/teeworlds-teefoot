@@ -622,6 +622,15 @@ void CCharacter::Tick()
 
 	m_Core.m_Input = m_Input;
 	m_Core.Tick(true);
+	if(!g_Config.m_SvHookTeam && m_Core.m_HookState == HOOK_GRABBED && m_Core.m_HookedPlayer != -1)
+	{ // if hook teammate, release hook
+		if(m_pPlayer->GetTeam() == GameServer()->GetPlayerChar(m_Core.m_HookedPlayer)->GetPlayer()->GetTeam())
+		{
+			m_Core.m_HookedPlayer = -1;
+			m_Core.m_HookState = HOOK_RETRACTED;
+			m_Core.m_HookPos = m_Core.m_Pos;
+		}
+	}
 
 	// handle death-tiles and leaving gamelayer
 	if(GameServer()->Collision()->GetCollisionAt(m_Pos.x+m_ProximityRadius/3.f, m_Pos.y-m_ProximityRadius/3.f)&CCollision::COLFLAG_DEATH ||
