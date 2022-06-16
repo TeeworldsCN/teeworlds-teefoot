@@ -21,14 +21,7 @@ CProjectile::CProjectile(CGameWorld *pGameWorld, int Type, int Owner, vec2 Pos, 
 	m_Weapon = Weapon;
 	m_StartTick = Server()->Tick();
 	m_Explosive = Explosive;
-	if(g_Config.m_SvGrenadeStartSpeed && GameServer()->GetPlayerChar(m_Owner))
-	{
-		m_Speed = (g_Config.m_SvGrenadeStartSpeed + GameServer()->GetPlayerChar(m_Owner)->m_Speed*2)*5; // TODO
-		m_Direction.x *= m_Speed/GameServer()->Tuning()->m_GrenadeSpeed;
-		m_Direction.y *= m_Speed/GameServer()->Tuning()->m_GrenadeSpeed;
-	}
-	else
-		m_Speed = GameServer()->Tuning()->m_GrenadeSpeed;
+	m_Speed = GameServer()->Tuning()->m_GrenadeSpeed;
 	if((Dir.x < 0?-Dir.x:Dir.x) > (Dir.y < 0?-Dir.y:Dir.y))
 		this->m_FootPickupDistance = abs(Dir.x * (float)Server()->TickSpeed() * GameServer()->Tuning()->m_GrenadeSpeed / 4000.0);
 	else

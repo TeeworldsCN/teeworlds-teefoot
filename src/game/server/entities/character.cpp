@@ -77,8 +77,6 @@ bool CCharacter::Spawn(CPlayer *pPlayer, vec2 Pos)
 	m_Core.Reset();
 	m_Core.Init(&GameServer()->m_World.m_Core, GameServer()->Collision());
 	m_Core.m_Pos = m_Pos;
-	//m_Core.m_Team = pPlayer->GetTeam();
-	m_Speed = 0;
 	GameServer()->m_World.m_Core.m_apCharacters[m_pPlayer->GetCID()] = &m_Core;
 
 	m_ReckoningTick = 0;
@@ -419,7 +417,8 @@ void CCharacter::FireWeapon()
 				GameServer()->m_pController->OnGoalBlue(m_pPlayer->GetCID(), false);
 			}
 			if(g_Config.m_SvGrenadeStartSpeed)
-				m_Speed = length(m_Core.m_Vel);
+				Direction.x += m_Core.m_Vel.x / GameServer()->Tuning()->m_GrenadeSpeed * Server()->TickSpeed();
+				Direction.y += m_Core.m_Vel.y / GameServer()->Tuning()->m_GrenadeSpeed * Server()->TickSpeed();
 			CProjectile *pProj = new CProjectile(GameWorld(), WEAPON_GRENADE,
 				m_pPlayer->GetCID(),
 				ProjStartPos,
