@@ -97,7 +97,10 @@ int CGameControllerFoot::OnGoalRed(int Owner, bool dunk)
 	else if (GameServer()->m_apPlayers[Owner]->GetTeam() == TEAM_RED)
 		m_aTeamscore[TEAM_RED]--;
 
-	GameServer()->CreateSoundGlobal(SOUND_CTF_DROP);
+	if(dunk)
+		GameServer()->CreateSoundGlobal(SOUND_GRENADE_EXPLODE);
+	else
+		GameServer()->CreateSoundGlobal(SOUND_CTF_DROP);
 
 	GameServer()->SendBroadcast(aBuf, -1);
 	Reset();
@@ -150,7 +153,10 @@ int CGameControllerFoot::OnGoalBlue(int Owner, bool dunk)
 		m_aTeamscore[TEAM_BLUE]--;
 	}
 
-	GameServer()->CreateSoundGlobal(SOUND_CTF_DROP);
+	if(dunk)
+		GameServer()->CreateSoundGlobal(SOUND_GRENADE_EXPLODE);
+	else
+		GameServer()->CreateSoundGlobal(SOUND_CTF_DROP);
 
 	GameServer()->SendBroadcast(aBuf, -1);
 	Reset();
