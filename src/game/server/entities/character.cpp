@@ -417,8 +417,8 @@ void CCharacter::FireWeapon()
 				GameServer()->m_pController->OnGoalBlue(m_pPlayer->GetCID(), false);
 			}
 			if(g_Config.m_SvGrenadeStartSpeed)
-				Direction.x += m_Core.m_Vel.x / GameServer()->Tuning()->m_GrenadeSpeed / g_Config.m_SvGrenadeStartSpeed * Server()->TickSpeed();
-				Direction.y += m_Core.m_Vel.y / GameServer()->Tuning()->m_GrenadeSpeed / g_Config.m_SvGrenadeStartSpeed * Server()->TickSpeed();
+				Direction.x += m_Core.m_Vel.x / GameServer()->Tuning()->m_GrenadeSpeed / g_Config.m_SvGrenadeStartSpeed * Server()->TickSpeed() * 40;
+				Direction.y += m_Core.m_Vel.y / GameServer()->Tuning()->m_GrenadeSpeed / g_Config.m_SvGrenadeStartSpeed * Server()->TickSpeed() * 40;
 			CProjectile *pProj = new CProjectile(GameWorld(), WEAPON_GRENADE,
 				m_pPlayer->GetCID(),
 				ProjStartPos,
